@@ -1,0 +1,417 @@
+/* ==========================================================================
+   MODERN CREATIVE RESUME
+   Bold typography, timeline layout, skill bars
+   ========================================================================== */
+
+/* ==========================================================================
+   PAGE LENGTH CONFIGURATION
+   
+   ONE PAGE:  height: 297mm   (A4 standard)
+   TWO PAGES: height: 594mm   (A4 x 2)
+   
+   If content overflows:
+   - Reduce --spacing-* variables below
+   - Reduce font-size in body (try 12px)
+   - Remove job entries or shorten bullet points
+   
+   The .grid section uses CSS grid, so the sidebar automatically
+   spans the full height of the content area.
+   ========================================================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --color-black: #0a0a0a;
+    --color-white: #ffffff;
+    --color-gray-100: #f5f5f5;
+    --color-gray-300: #d4d4d4;
+    --color-gray-500: #737373;
+    --color-gray-700: #404040;
+    --color-accent: #6366f1;
+    --color-accent-light: #a5b4fc;
+    
+    /* Spacing variables - reduce these if content overflows */
+    --spacing-header: 36px 40px 28px;
+    --spacing-section: 24px;
+    --spacing-job: 20px;
+}
+
+body {
+    font-family: 'Space Grotesk', system-ui, sans-serif;
+    font-size: 13px;  /* Reduce to 12px if content overflows */
+    line-height: 1.6;
+    color: var(--color-black);
+    background: var(--color-gray-100);
+}
+
+/*
+ * PAGE CONTAINER
+ * Change height to 594mm for a two-page resume.
+ * The grid and sidebar will automatically extend to fill the space.
+ */
+.page {
+    width: 210mm;
+    height: 297mm;      /* 297mm = 1 page, 594mm = 2 pages */
+    max-height: 297mm;  /* Update this to match height */
+    overflow: hidden;
+    margin: 0 auto;
+    background: var(--color-white);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    display: flex;
+    flex-direction: column;
+}
+
+/* ==========================================================================
+   HEADER
+   ========================================================================== */
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    padding: 36px 40px 28px;
+    border-bottom: 3px solid var(--color-black);
+}
+
+.header h1 {
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -1.5px;
+    line-height: 1;
+    margin-bottom: 6px;
+}
+
+.role {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--color-gray-500);
+}
+
+.header__right {
+    text-align: right;
+}
+
+.contact-item {
+    font-size: 12px;
+    color: var(--color-gray-700);
+    margin-bottom: 4px;
+}
+
+.contact-item:last-child {
+    margin-bottom: 0;
+}
+
+/* ==========================================================================
+   INTRO
+   ========================================================================== */
+
+.intro {
+    padding: 24px 40px;
+    background: var(--color-gray-100);
+}
+
+.intro p {
+    font-size: 14px;
+    line-height: 1.6;
+    color: var(--color-gray-700);
+    max-width: 600px;
+}
+
+/* ==========================================================================
+   GRID LAYOUT
+   The grid fills remaining page height so sidebar spans full height.
+   ========================================================================== */
+
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    flex: 1;  /* Fill remaining space in page */
+}
+
+/* ==========================================================================
+   SECTION TITLES
+   ========================================================================== */
+
+h2 {
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--color-gray-500);
+    margin-bottom: 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.number {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    background: var(--color-black);
+    color: var(--color-white);
+    border-radius: 50%;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   EXPERIENCE TIMELINE
+   ========================================================================== */
+
+.experience {
+    padding: 28px 40px;
+    border-right: 1px solid var(--color-gray-300);
+}
+
+.timeline {
+    position: relative;
+    padding-left: 24px;
+}
+
+.timeline::before {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 8px;
+    bottom: 8px;
+    width: 2px;
+    background: linear-gradient(180deg, var(--color-accent), var(--color-accent-light));
+}
+
+.job {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.job:last-child {
+    margin-bottom: 0;
+}
+
+.job__marker {
+    position: absolute;
+    left: -24px;
+    top: 6px;
+    width: 12px;
+    height: 12px;
+    background: var(--color-white);
+    border: 3px solid var(--color-accent);
+    border-radius: 50%;
+}
+
+.job__header {
+    margin-bottom: 10px;
+}
+
+.job__header h3 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.company {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--color-accent);
+}
+
+.period {
+    font-size: 12px;
+    color: var(--color-gray-500);
+    margin-left: 12px;
+}
+
+.job ul {
+    list-style: none;
+}
+
+.job li {
+    position: relative;
+    padding-left: 16px;
+    margin-bottom: 6px;
+    font-size: 13px;
+    color: var(--color-gray-700);
+}
+
+.job li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--color-gray-300);
+}
+
+/* ==========================================================================
+   SIDEBAR
+   ========================================================================== */
+
+.sidebar {
+    padding: 28px 24px;
+    background: var(--color-gray-100);
+}
+
+.sidebar section {
+    margin-bottom: 24px;
+}
+
+.sidebar h2 {
+    font-size: 10px;
+    margin-bottom: 16px;
+}
+
+.sidebar section:last-child {
+    margin-bottom: 0;
+}
+
+/* Skills */
+.skill-block {
+    margin-bottom: 16px;
+}
+
+.skill-block:last-child {
+    margin-bottom: 0;
+}
+
+.skill-block h3 {
+    font-size: 11px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--color-gray-700);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.skill-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.skill-bar {
+    position: relative;
+    height: 6px;
+    background: var(--color-gray-300);
+    border-radius: 3px;
+    margin-top: 16px;
+}
+
+.skill-bar::before {
+    content: attr(data-skill);
+    position: absolute;
+    bottom: 100%;
+    left: 0;
+    font-size: 11px;
+    color: var(--color-gray-500);
+    margin-bottom: 6px;
+}
+
+.skill-bar::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: var(--level);
+    background: linear-gradient(90deg, var(--color-accent), var(--color-accent-light));
+    border-radius: 3px;
+}
+
+/* Education */
+.edu-item {
+    margin-bottom: 16px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--color-gray-300);
+}
+
+.edu-item:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    border-bottom: none;
+}
+
+.edu-item h3 {
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+
+.edu-item p {
+    font-size: 12px;
+    color: var(--color-gray-500);
+}
+
+.year {
+    display: inline-block;
+    margin-top: 6px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--color-accent);
+    background: rgba(99, 102, 241, 0.1);
+    padding: 2px 8px;
+    border-radius: 3px;
+}
+
+/* Awards */
+.award-list {
+    list-style: none;
+}
+
+.award-list li {
+    font-size: 12px;
+    color: var(--color-gray-700);
+    padding: 8px 0;
+    border-bottom: 1px dashed var(--color-gray-300);
+}
+
+.award-list li:last-child {
+    border-bottom: none;
+}
+
+/* ==========================================================================
+   PRINT STYLES
+   ========================================================================== */
+
+@media print {
+    body {
+        background: none;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    
+    .page {
+        width: 100%;
+        min-height: 0;
+        box-shadow: none;
+        margin: 0;
+    }
+    
+    .sidebar {
+        background: var(--color-gray-100) !important;
+    }
+    
+    .number {
+        background: var(--color-black) !important;
+        color: var(--color-white) !important;
+    }
+    
+    .skill-bar::after {
+        background: linear-gradient(90deg, var(--color-accent), var(--color-accent-light)) !important;
+    }
+    
+    @page {
+        size: A4;
+        margin: 0;
+    }
+}
+
+/* Screen preview centering */
+@media screen {
+    body {
+        padding: 40px 20px;
+    }
+}

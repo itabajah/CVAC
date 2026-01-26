@@ -1,0 +1,35 @@
+{
+  "name": "cv-as-code",
+  "version": "1.0.0",
+  "description": "Source code for CV As Code (PDF generation, ATS testing, preview server)",
+  "scripts": {
+    "start": "node server/index.js",
+    "serve": "node server/index.js",
+    "pdf": "node cli/pdf.js",
+    "pdf:watch": "node cli/pdf.js --watch",
+    "ats": "node cli/ats.js",
+    "test": "node --test tests/**/*.test.js",
+    "test:unit": "node --test tests/unit/**/*.test.js",
+    "test:integration": "node --test tests/integration/**/*.test.js",
+    "test:utils": "node --test tests/unit/resume.test.js",
+    "test:config": "node --test tests/unit/config.test.js",
+    "test:resumes": "node --test tests/unit/resumes.test.js",
+    "test:routes": "node --test tests/integration/routes.test.js",
+    "test:pdf": "node --test tests/integration/pdf-generation.test.js",
+    "test:ats": "node --test tests/integration/ats.test.js",
+    "test:coverage": "node --test --experimental-test-coverage tests/**/*.test.js"
+  },
+  "dependencies": {
+    "chokidar": "^5.0.0",
+    "pdfjs-dist": "^5.4.530",
+    "puppeteer": "^24.36.1"
+  },
+  "keywords": [
+    "cv",
+    "resume",
+    "pdf",
+    "ats"
+  ],
+  "author": "",
+  "license": "MIT"
+}

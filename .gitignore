@@ -1,0 +1,28 @@
+# Dependencies
+node_modules/
+src/node_modules/
+package-lock.json
+
+# User resumes folder (created on first run)
+resumes/
+
+# Generated PDF files
+*.pdf
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor files
+.vscode/
+*.swp
+*.swo
+*~
+
+# Logs
+*.log
+npm-debug.log*
+
+# Test generated files
+src/tests/fixtures/resumes/
+src/tests/fixtures/config/

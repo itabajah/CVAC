@@ -1,0 +1,443 @@
+/* Modal styles (overlay, dialogs, config panel) */
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+/* Modal Base */
+.modal {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    max-width: 340px;
+    width: 90%;
+}
+
+.modal--config {
+    max-width: 520px;
+    padding: 0;
+}
+
+.modal--stop {
+    text-align: center;
+    padding: 28px 32px;
+    max-width: 440px;
+}
+
+/* Modal Typography */
+.modal__title {
+    color: #1a1a1a;
+    margin: 0 0 16px;
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.modal--stop .modal__title {
+    margin-bottom: 24px;
+    font-size: 20px;
+}
+
+.modal__text {
+    color: #666;
+    margin: 0 0 16px;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+.modal__alert-icon {
+    font-size: 32px;
+    color: #666;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+/* Modal Buttons */
+.modal__actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 16px;
+}
+
+.modal__btn {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.modal__btn--primary {
+    background: #1e3a5f;
+    color: #fff;
+}
+
+.modal__btn--primary:hover {
+    background: #15304f;
+}
+
+.modal__btn--secondary {
+    background: #f0f0f0;
+    color: #333;
+}
+
+.modal__btn--secondary:hover {
+    background: #e5e5e5;
+}
+
+.modal__cancel {
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+.modal__cancel:hover {
+    color: #555;
+}
+
+/* Stop Server Options */
+.stop-options {
+    display: flex;
+    gap: 16px;
+}
+
+.stop-option {
+    flex: 1;
+    padding: 20px 16px;
+    background: #f8f8f8;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    cursor: pointer;
+    text-align: center;
+}
+
+.stop-option:hover {
+    background: #f0f0f0;
+    border-color: #ccc;
+}
+
+.stop-option i {
+    font-size: 26px;
+    color: #555;
+    display: block;
+    margin-bottom: 12px;
+}
+
+.stop-option--alt i {
+    color: #555;
+}
+
+.stop-option__label {
+    display: block;
+    font-size: 15px;
+    font-weight: 600;
+    color: #1a1a1a;
+    margin-bottom: 4px;
+}
+
+.stop-option__hint {
+    display: block;
+    font-size: 13px;
+    color: #888;
+}
+
+/* Config Modal */
+.config-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 16px 12px;
+    border-bottom: 1px solid #eee;
+}
+
+.config-header .modal__title {
+    margin: 0;
+}
+
+.config-header__actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.config-link {
+    background: none;
+    border: none;
+    color: #1e3a5f;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 2px 6px;
+}
+
+.config-link:hover {
+    text-decoration: underline;
+}
+
+.config-link-sep {
+    color: #ccc;
+    font-size: 14px;
+}
+
+.config-list {
+    max-height: 450px;
+    overflow-y: auto;
+    padding: 12px;
+}
+
+/* Config Sections */
+.config-section {
+    margin-bottom: 0;
+    border: none;
+    border-radius: 0;
+    overflow: hidden;
+}
+
+.config-section + .config-section {
+    border-top: 1px solid #e0e0e0;
+    padding-top: 4px;
+    margin-top: 4px;
+}
+
+.config-section__header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 6px;
+    background: transparent;
+    user-select: none;
+    font-weight: 600;
+    font-size: 14px;
+    color: #666;
+}
+
+.config-section__icon {
+    color: #666;
+    font-size: 14px;
+}
+
+.config-section__count {
+    margin-left: auto;
+    background: #eee;
+    color: #666;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 2px 6px;
+    border-radius: 8px;
+}
+
+.config-section__items {
+    border-top: none;
+    max-height: none;
+    overflow-y: visible;
+}
+
+.config-section__items .config-item {
+    border-radius: 0;
+}
+
+.config-section__items .config-item:first-child {
+    border-radius: 0;
+}
+
+.config-section__add-path {
+    padding: 10px 12px;
+    background: transparent;
+}
+
+/* Externals section - collapsed and muted by default */
+.config-section--externals {
+    opacity: 0.6;
+    background: #fafafa;
+    border-radius: 6px;
+    margin-top: 8px;
+    transition: opacity 0.2s ease;
+}
+
+.config-section--externals:hover,
+.config-section--externals.expanded {
+    opacity: 1;
+}
+
+.config-section--externals .config-section__header {
+    cursor: pointer;
+    padding: 10px 12px;
+    border-radius: 6px;
+}
+
+.config-section--externals .config-section__header::after {
+    content: '\f078';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    font-size: 10px;
+    margin-left: 8px;
+    color: #999;
+    transition: transform 0.2s ease;
+}
+
+.config-section--externals.expanded .config-section__header::after {
+    transform: rotate(180deg);
+}
+
+.config-section--externals .config-section__add-path {
+    display: none;
+    border-top: 1px solid #e0e0e0;
+}
+
+.config-section--externals.expanded .config-section__add-path {
+    display: block;
+}
+
+.config-section__hint {
+    font-size: 11px;
+    color: #999;
+    font-weight: normal;
+    margin-left: 4px;
+}
+
+.add-path-row {
+    display: flex;
+    gap: 8px;
+}
+
+.add-path-input {
+    flex: 1;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+}
+
+.add-path-input:focus {
+    outline: none;
+    border-color: #1e3a5f;
+}
+
+.add-path-btn {
+    padding: 10px 14px;
+    background: #1e3a5f;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.add-path-btn:hover {
+    background: #15304f;
+}
+
+.external-paths-list {
+    margin-top: 10px;
+}
+
+.external-paths-empty {
+    color: #999;
+    font-size: 14px;
+    font-style: italic;
+    text-align: center;
+    padding: 10px;
+}
+
+.external-path-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    background: #fafafa;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.external-path-checkbox {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+
+.external-path-text {
+    font-weight: 500;
+    color: #333;
+    flex-shrink: 0;
+}
+
+.external-path-full {
+    flex: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #888;
+    font-size: 12px;
+}
+
+.external-path-remove {
+    background: none;
+    border: none;
+    color: #999;
+    cursor: pointer;
+    padding: 4px 6px;
+    font-size: 12px;
+    flex-shrink: 0;
+}
+
+.external-path-remove:hover {
+    color: #dc3545;
+}
+
+.config-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.config-item:hover {
+    background: #f5f5f5;
+}
+
+.config-item input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+}
+
+.config-item i {
+    color: #999;
+    width: 16px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.config-item span {
+    flex: 1;
+    font-size: 15px;
+    color: #333;
+}
+
+.config-footer {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+    padding: 14px 18px;
+    border-top: 1px solid #eee;
+    background: #fafafa;
+    border-radius: 0 0 8px 8px;
+}

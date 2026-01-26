@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alex Chen - Resume</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!--
+    ============================================================================
+    PAGE LENGTH GUIDE
+    ============================================================================
+    
+    ONE PAGE (A4 = 297mm):
+    - Keep .page { height: 297mm; } in CSS
+    - If content overflows, reduce padding/margins or remove content
+    - Adjust font-size from 13px to 12px if needed
+    - Reduce section margins (margin-bottom) by 4-8px each
+    
+    TWO PAGES (A4 x 2 = 594mm):
+    - Change .page { height: 594mm; } in CSS
+    - Add more content sections as needed
+    - Consider adding a page-break hint: .section--page-break { margin-top: 297mm; }
+    
+    SIDEBAR HEIGHT:
+    - Sidebar automatically spans full page height via CSS grid
+    - For 2 pages, sidebar will also extend to 594mm
+    ============================================================================
+    -->
+    <div class="page">
+        <aside class="sidebar">
+            <div class="sidebar__content">
+                <div class="profile">
+                    <div class="profile__initials">AC</div>
+                    <h1 class="profile__name">Alex Chen</h1>
+                    <p class="profile__title">Full-Stack Developer</p>
+                </div>
+
+                <div class="contact">
+                    <h2>Contact</h2>
+                    <ul>
+                        <li>
+                            <span class="label">Email</span>
+                            <span>alex.chen@email.com</span>
+                        </li>
+                        <li>
+                            <span class="label">Phone</span>
+                            <span>+1 (555) 123-4567</span>
+                        </li>
+                        <li>
+                            <span class="label">Location</span>
+                            <span>Seattle, WA</span>
+                        </li>
+                        <li>
+                            <span class="label">GitHub</span>
+                            <span>github.com/alexchen</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="skills">
+                    <h2>Skills</h2>
+                    <div class="skill-group">
+                        <h3>Languages</h3>
+                        <div class="tags">
+                            <span>JavaScript</span>
+                            <span>TypeScript</span>
+                            <span>Python</span>
+                            <span>Go</span>
+                        </div>
+                    </div>
+                    <div class="skill-group">
+                        <h3>Frameworks</h3>
+                        <div class="tags">
+                            <span>React</span>
+                            <span>Node.js</span>
+                            <span>Next.js</span>
+                            <span>FastAPI</span>
+                        </div>
+                    </div>
+                    <div class="skill-group">
+                        <h3>Tools</h3>
+                        <div class="tags">
+                            <span>Docker</span>
+                            <span>AWS</span>
+                            <span>PostgreSQL</span>
+                            <span>Redis</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main">
+            <section class="section">
+                <h2 class="section__title">Experience</h2>
+                
+                <article class="entry">
+                    <div class="entry__header">
+                        <h3>Senior Software Engineer</h3>
+                        <span class="entry__company">Cloudify Technologies</span>
+                        <span class="entry__date">2022 — Present</span>
+                    </div>
+                    <ul class="entry__list">
+                        <li>Architected and deployed distributed caching layer using Redis, reducing database load by 60% and improving response times from 800ms to 120ms</li>
+                        <li>Led cross-functional team of 5 engineers in migrating legacy monolith to event-driven microservices, resulting in 40% faster deployments</li>
+                        <li>Designed real-time analytics pipeline processing 50K events/second using Kafka and ClickHouse</li>
+                    </ul>
+                </article>
+
+                <article class="entry">
+                    <div class="entry__header">
+                        <h3>Software Engineer</h3>
+                        <span class="entry__company">StartupHub Inc.</span>
+                        <span class="entry__date">2020 — 2022</span>
+                    </div>
+                    <ul class="entry__list">
+                        <li>Built React dashboard with real-time WebSocket updates, serving 10K+ daily active users</li>
+                        <li>Implemented comprehensive CI/CD pipeline with GitHub Actions, cutting deployment time by 70%</li>
+                        <li>Developed REST API with 95% test coverage, reducing production incidents by 80%</li>
+                    </ul>
+                </article>
+
+                <article class="entry">
+                    <div class="entry__header">
+                        <h3>Junior Developer</h3>
+                        <span class="entry__company">WebAgency Co.</span>
+                        <span class="entry__date">2018 — 2020</span>
+                    </div>
+                    <ul class="entry__list">
+                        <li>Developed responsive web applications for 15+ clients using React and Node.js</li>
+                        <li>Integrated payment systems (Stripe, PayPal) and third-party APIs</li>
+                    </ul>
+                </article>
+            </section>
+
+            <section class="section">
+                <h2 class="section__title">Education</h2>
+                
+                <article class="entry">
+                    <div class="entry__header">
+                        <h3>B.S. Computer Science</h3>
+                        <span class="entry__company">University of Washington</span>
+                        <span class="entry__date">2014 — 2018</span>
+                    </div>
+                    <p class="entry__detail">GPA: 3.8/4.0 · Dean's List · Relevant: Algorithms, Distributed Systems, Databases</p>
+                </article>
+            </section>
+
+            <section class="section">
+                <h2 class="section__title">Projects</h2>
+                
+                <article class="entry">
+                    <div class="entry__header">
+                        <h3>DevFlow CLI</h3>
+                        <span class="entry__meta">Open Source · 800+ GitHub Stars</span>
+                    </div>
+                    <p class="entry__description">Developer productivity tool built with Go. Automates project scaffolding, dependency management, and deployment workflows. Published on Homebrew and npm.</p>
+                </article>
+            </section>
+        </main>
+    </div>
+</body>
+</html>

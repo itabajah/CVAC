@@ -1,0 +1,335 @@
+/* ==========================================================================
+   MODERN TWO-COLUMN RESUME
+   A visually interesting layout with sidebar and accent colors
+   ========================================================================== */
+
+/* ==========================================================================
+   PAGE LENGTH CONFIGURATION
+   
+   ONE PAGE:  height: 297mm   (A4 standard)
+   TWO PAGES: height: 594mm   (A4 x 2)
+   
+   If content overflows:
+   - Reduce --spacing-* variables below
+   - Reduce font-size in body (try 12px)
+   - Remove or condense content sections
+   
+   Sidebar automatically spans full page height via CSS grid.
+   ========================================================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --color-primary: #2d3748;
+    --color-accent: #4a5568;
+    --color-sidebar: #1a202c;
+    --color-sidebar-text: #e2e8f0;
+    --color-sidebar-muted: #a0aec0;
+    --color-text: #2d3748;
+    --color-text-muted: #718096;
+    --color-border: #e2e8f0;
+    --color-tag-bg: rgba(255, 255, 255, 0.1);
+    
+    /* Spacing variables - reduce these if content overflows */
+    --spacing-page-padding: 32px;
+    --spacing-section: 24px;
+    --spacing-entry: 20px;
+}
+
+body {
+    font-family: 'Source Sans 3', 'Segoe UI', system-ui, sans-serif;
+    font-size: 13px;  /* Reduce to 12px if content overflows */
+    line-height: 1.6;
+    color: var(--color-text);
+    background: #f7fafc;
+}
+
+/*
+ * PAGE CONTAINER
+ * Change height to 594mm for a two-page resume.
+ * The sidebar will automatically extend to match.
+ */
+.page {
+    width: 210mm;
+    height: 297mm;      /* 297mm = 1 page, 594mm = 2 pages */
+    max-height: 297mm;  /* Update this to match height */
+    overflow: hidden;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    background: #fff;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* ==========================================================================
+   SIDEBAR
+   ========================================================================== */
+
+.sidebar {
+    background: var(--color-sidebar);
+    color: var(--color-sidebar-text);
+    padding: 32px 20px;
+}
+
+.sidebar h2 {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 14px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--color-sidebar-muted);
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Profile */
+.profile {
+    text-align: center;
+    margin-bottom: 28px;
+}
+
+.profile__initials {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 16px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 2px;
+}
+
+.profile__name {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    letter-spacing: 0.5px;
+}
+
+.profile__title {
+    font-size: 13px;
+    color: var(--color-sidebar-muted);
+    font-weight: 400;
+}
+
+/* Contact */
+.contact {
+    margin-bottom: 32px;
+}
+
+.contact ul {
+    list-style: none;
+}
+
+.contact li {
+    margin-bottom: 12px;
+    font-size: 12px;
+}
+
+.contact .label {
+    display: block;
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--color-sidebar-muted);
+    margin-bottom: 2px;
+}
+
+/* Skills */
+.skills {
+    margin-bottom: 24px;
+}
+
+.skill-group {
+    margin-bottom: 16px;
+}
+
+.skill-group:last-child {
+    margin-bottom: 0;
+}
+
+.skill-group h3 {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--color-sidebar-muted);
+    margin-bottom: 8px;
+}
+
+.tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+
+.tags span {
+    background: var(--color-tag-bg);
+    padding: 4px 10px;
+    border-radius: 3px;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+/* ==========================================================================
+   MAIN CONTENT
+   ========================================================================== */
+
+.main {
+    padding: 32px 32px;
+}
+
+.section {
+    margin-bottom: 24px;
+}
+
+.section:last-child {
+    margin-bottom: 0;
+}
+
+.section__title {
+    font-family: 'Playfair Display', Georgia, serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--color-primary);
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--color-border);
+    position: relative;
+}
+
+.section__title::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background: linear-gradient(90deg, #667eea, #764ba2);
+}
+
+/* Entries */
+.entry {
+    margin-bottom: 24px;
+}
+
+.entry:last-child {
+    margin-bottom: 0;
+}
+
+.entry__header {
+    margin-bottom: 10px;
+}
+
+.entry__header h3 {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-primary);
+    margin-bottom: 2px;
+}
+
+.entry__company {
+    font-size: 13px;
+    color: var(--color-accent);
+    font-weight: 500;
+}
+
+.entry__date {
+    float: right;
+    font-size: 12px;
+    color: var(--color-text-muted);
+    font-weight: 500;
+}
+
+.entry__meta {
+    font-size: 12px;
+    color: var(--color-text-muted);
+    font-style: italic;
+}
+
+.entry__list {
+    list-style: none;
+    padding-left: 0;
+}
+
+.entry__list li {
+    position: relative;
+    padding-left: 16px;
+    margin-bottom: 6px;
+    color: var(--color-text);
+}
+
+.entry__list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 8px;
+    width: 6px;
+    height: 6px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 50%;
+}
+
+.entry__detail {
+    font-size: 13px;
+    color: var(--color-text-muted);
+}
+
+.entry__description {
+    color: var(--color-text);
+    line-height: 1.7;
+}
+
+/* ==========================================================================
+   PRINT STYLES
+   ========================================================================== */
+
+@media print {
+    body {
+        background: none;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    
+    .page {
+        width: 100%;
+        min-height: 0;
+        box-shadow: none;
+        margin: 0;
+    }
+    
+    .sidebar {
+        background: var(--color-sidebar) !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    
+    .profile__initials {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+    }
+    
+    @page {
+        size: A4;
+        margin: 0;
+    }
+}
+
+/* Screen preview centering */
+@media screen {
+    body {
+        padding: 40px 20px;
+    }
+}

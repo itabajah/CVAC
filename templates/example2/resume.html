@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jordan Rivera - Resume</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <!--
+    ============================================================================
+    PAGE LENGTH GUIDE
+    ============================================================================
+    
+    ONE PAGE (A4 = 297mm):
+    - Keep .page { height: 297mm; } in CSS
+    - If content overflows, reduce padding/margins or remove content
+    - Adjust font-size from 13px to 12px if needed
+    - Reduce job margins and sidebar section spacing
+    
+    TWO PAGES (A4 x 2 = 594mm):
+    - Change .page { height: 594mm; } in CSS
+    - The .grid section will expand to fill available space
+    - Add more job entries or sections as needed
+    
+    SIDEBAR HEIGHT:
+    - The right sidebar (.sidebar) spans full grid height
+    - For 2 pages, use .grid { min-height: calc(594mm - header - intro); }
+    ============================================================================
+    -->
+    <div class="page">
+        <header class="header">
+            <div class="header__left">
+                <h1>Jordan Rivera</h1>
+                <p class="role">Product Designer & UX Engineer</p>
+            </div>
+            <div class="header__right">
+                <div class="contact-item">jordan@email.com</div>
+                <div class="contact-item">portfolio.dev/jordan</div>
+                <div class="contact-item">San Francisco, CA</div>
+            </div>
+        </header>
+
+        <section class="intro">
+            <p>Design-focused engineer with 6+ years of experience bridging the gap between design and development. I create user-centered digital products that are both beautiful and functional, with a focus on accessibility and performance.</p>
+        </section>
+
+        <div class="grid">
+            <section class="experience">
+                <h2><span class="number">01</span> Experience</h2>
+                
+                <div class="timeline">
+                    <article class="job">
+                        <div class="job__marker"></div>
+                        <div class="job__content">
+                            <div class="job__header">
+                                <h3>Lead Product Designer</h3>
+                                <span class="company">Figma</span>
+                                <span class="period">2022 — Present</span>
+                            </div>
+                            <ul>
+                                <li>Led design system initiative adopted by 200+ designers across the organization</li>
+                                <li>Shipped FigJam widgets feature, increasing user engagement by 40%</li>
+                                <li>Mentored team of 4 junior designers on interaction design principles</li>
+                            </ul>
+                        </div>
+                    </article>
+
+                    <article class="job">
+                        <div class="job__marker"></div>
+                        <div class="job__content">
+                            <div class="job__header">
+                                <h3>Senior UX Engineer</h3>
+                                <span class="company">Airbnb</span>
+                                <span class="period">2019 — 2022</span>
+                            </div>
+                            <ul>
+                                <li>Built component library used across 15+ product teams (React, TypeScript)</li>
+                                <li>Improved booking flow conversion by 25% through A/B tested redesign</li>
+                                <li>Established accessibility standards achieving WCAG 2.1 AA compliance</li>
+                            </ul>
+                        </div>
+                    </article>
+
+                    <article class="job">
+                        <div class="job__marker"></div>
+                        <div class="job__content">
+                            <div class="job__header">
+                                <h3>Product Designer</h3>
+                                <span class="company">Spotify</span>
+                                <span class="period">2017 — 2019</span>
+                            </div>
+                            <ul>
+                                <li>Designed podcast discovery features for 100M+ monthly active users</li>
+                                <li>Conducted user research and usability testing across 5 markets</li>
+                            </ul>
+                        </div>
+                    </article>
+                </div>
+            </section>
+
+            <aside class="sidebar">
+                <section class="skills">
+                    <h2><span class="number">02</span> Skills</h2>
+                    
+                    <div class="skill-block">
+                        <h3>Design</h3>
+                        <div class="skill-bars">
+                            <div class="skill-bar" data-skill="Figma" style="--level: 95%"></div>
+                            <div class="skill-bar" data-skill="Prototyping" style="--level: 90%"></div>
+                            <div class="skill-bar" data-skill="User Research" style="--level: 85%"></div>
+                            <div class="skill-bar" data-skill="Design Systems" style="--level: 92%"></div>
+                        </div>
+                    </div>
+
+                    <div class="skill-block">
+                        <h3>Development</h3>
+                        <div class="skill-bars">
+                            <div class="skill-bar" data-skill="React" style="--level: 88%"></div>
+                            <div class="skill-bar" data-skill="TypeScript" style="--level: 80%"></div>
+                            <div class="skill-bar" data-skill="CSS/Tailwind" style="--level: 95%"></div>
+                            <div class="skill-bar" data-skill="Motion Design" style="--level: 75%"></div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="education">
+                    <h2><span class="number">03</span> Education</h2>
+                    <div class="edu-item">
+                        <h3>M.S. Human-Computer Interaction</h3>
+                        <p>Carnegie Mellon University</p>
+                        <span class="year">2017</span>
+                    </div>
+                    <div class="edu-item">
+                        <h3>B.A. Graphic Design</h3>
+                        <p>RISD</p>
+                        <span class="year">2015</span>
+                    </div>
+                </section>
+
+                <section class="awards">
+                    <h2><span class="number">04</span> Recognition</h2>
+                    <ul class="award-list">
+                        <li>Webby Award — Best UX (2023)</li>
+                        <li>Fast Company Innovation by Design (2022)</li>
+                        <li>Awwwards Site of the Day (2021)</li>
+                    </ul>
+                </section>
+            </aside>
+        </div>
+    </div>
+</body>
+</html>

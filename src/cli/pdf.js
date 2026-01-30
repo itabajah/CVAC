@@ -1,15 +1,18 @@
 /**
- * High-Quality PDF Generator for CV As Code
+ * Ultra High-Quality PDF Generator for CV As Code
  * 
  * Uses Puppeteer to generate ATS-optimized, print-quality PDFs
  * with proper font embedding and text extraction support.
  * 
- * Quality Settings:
- * - deviceScaleFactor: 8 (maximum quality rendering)
+ * Quality Settings (Maximum):
+ * - deviceScaleFactor: 16 (ultra-high quality rendering)
  * - scale: 1 (native rendering, no scaling artifacts)
  * - printBackground: true (preserve all colors and backgrounds)
  * - tagged: true (accessibility and ATS compatibility)
- * - Font rendering optimized for print quality
+ * - Extended wait times for perfect font and style rendering
+ * - Font rendering optimized for maximum print quality
+ * 
+ * Note: This configuration prioritizes quality over speed and file size.
  * 
  * Usage:
  *   npm run pdf                      - Generate PDF for first resume
@@ -28,12 +31,12 @@ const {
     parseWatchArg 
 } = require('../shared/resume');
 
-// Timing constants - increased for maximum quality
-const NAVIGATION_TIMEOUT_MS = 60000;
-const RENDER_WAIT_MS = 3000;
-const FONT_LOAD_WAIT_MS = 1000;
+// Timing constants - extended for maximum quality rendering
+const NAVIGATION_TIMEOUT_MS = 120000;  // 2 minutes for complex pages
+const RENDER_WAIT_MS = 5000;           // 5 seconds for complete style application
+const FONT_LOAD_WAIT_MS = 3000;        // 3 seconds for all fonts to fully load
 
-// Configuration factory - Maximum quality settings
+// Configuration factory - Ultra Maximum quality settings
 function getConfig(resumeDir) {
     return {
         inputFile: path.join(resumeDir, 'resume.html'),
@@ -64,11 +67,11 @@ function getConfig(resumeDir) {
             scale: 1
         },
         
-        // Viewport for consistent rendering - Maximum quality
+        // Viewport for consistent rendering - Ultra Maximum quality
         viewport: {
             width: 794,   // A4 width at 96 DPI
             height: 1123, // A4 height at 96 DPI
-            deviceScaleFactor: 8  // 8x for maximum quality rendering (print-grade)
+            deviceScaleFactor: 16  // 16x for ultra-maximum quality rendering (print-grade)
         },
         
         // Browser launch args for best rendering quality
@@ -80,7 +83,11 @@ function getConfig(resumeDir) {
             '--disable-gpu-driver-bug-workarounds',
             '--enable-font-antialiasing',        // Smooth fonts
             '--force-color-profile=srgb',        // Consistent colors
-            '--disable-accelerated-2d-canvas'    // Software rendering for consistency
+            '--disable-accelerated-2d-canvas',   // Software rendering for consistency
+            '--force-device-scale-factor=16',    // Force high DPI
+            '--high-dpi-support=1',              // Enable high DPI support
+            '--disable-lcd-text',                // Disable subpixel rendering for cleaner output
+            '--disable-font-subpixel-positioning' // Precise font positioning
         ]
     };
 }
@@ -101,8 +108,8 @@ async function generatePDF(resumeDir) {
     let browser;
     
     try {
-        // Launch browser with optimized settings for maximum quality
-        console.log('[PDF] Launching browser with high-quality settings...');
+        // Launch browser with optimized settings for ultra maximum quality
+        console.log('[PDF] Launching browser with ultra high-quality settings...');
         browser = await puppeteer.launch({
             headless: 'new',
             args: CONFIG.browserArgs
@@ -110,7 +117,7 @@ async function generatePDF(resumeDir) {
         
         const page = await browser.newPage();
         
-        // Set viewport for consistent rendering at maximum quality
+        // Set viewport for consistent rendering at ultra maximum quality
         await page.setViewport(CONFIG.viewport);
         
         // Enable request interception to ensure all resources load
@@ -149,8 +156,8 @@ async function generatePDF(resumeDir) {
             return document.body.offsetHeight;
         });
         
-        // Generate PDF with maximum quality
-        console.log('[PDF] Generating high-quality PDF...');
+        // Generate PDF with ultra maximum quality
+        console.log('[PDF] Generating ultra high-quality PDF...');
         await page.pdf({
             path: CONFIG.outputFile,
             ...CONFIG.pdf
@@ -159,11 +166,11 @@ async function generatePDF(resumeDir) {
         const duration = ((Date.now() - startTime) / 1000).toFixed(2);
         const fileSize = (fs.statSync(CONFIG.outputFile).size / 1024).toFixed(1);
         
-        console.log(`\n[SUCCESS] High-quality PDF generated successfully!`);
+        console.log(`\n[SUCCESS] Ultra high-quality PDF generated successfully!`);
         console.log(`  Resume: ${resumeName}`);
         console.log(`  Output: ${path.relative(SRC_DIR, CONFIG.outputFile)}`);
         console.log(`  Size: ${fileSize} KB`);
-        console.log(`  Quality: Maximum (8x device scale)`);
+        console.log(`  Quality: Ultra Maximum (16x device scale)`);
         console.log(`  Time: ${duration}s\n`);
         
     } catch (error) {

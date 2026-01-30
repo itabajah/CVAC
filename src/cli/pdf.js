@@ -7,7 +7,8 @@
  * Quality Settings (EXTREME):
  * - Viewport at 300 DPI (print standard) = 2480 x 3508 pixels for A4
  * - deviceScaleFactor: 4 on top of 300 DPI = effective 1200 DPI
- * - Extended wait times for perfect rendering
+ * - Proper readiness detection (no arbitrary wait times)
+ * - Optimized browser flags for maximum rendering quality
  * 
  * WARNING: This will use significant memory (2-4GB) and take longer to generate.
  * 
@@ -28,10 +29,8 @@ const {
     parseWatchArg 
 } = require('../shared/resume');
 
-// Timing constants - extended for extreme quality rendering
-const NAVIGATION_TIMEOUT_MS = 300000;  // 5 minutes for complex pages
-const RENDER_WAIT_MS = 10000;          // 10 seconds for complete style application
-const FONT_LOAD_WAIT_MS = 5000;        // 5 seconds for all fonts to fully load
+// Navigation timeout (generous for slow networks/fonts)
+const NAVIGATION_TIMEOUT_MS = 300000;  // 5 minutes
 
 // Configuration factory - EXTREME quality settings
 function getConfig(resumeDir) {
@@ -77,10 +76,29 @@ function getConfig(resumeDir) {
             deviceScaleFactor: 4  // 4x on top of 300 DPI = 1200 DPI effective
         },
         
-        // Minimal browser args - only essential ones for stability
+        // Browser args optimized for maximum rendering quality
         browserArgs: [
+            // Required for stability
             '--no-sandbox',
-            '--disable-setuid-sandbox'
+            '--disable-setuid-sandbox',
+            
+            // Font rendering optimization
+            '--font-render-hinting=none',           // Disable hinting for clean vector output
+            '--disable-font-subpixel-positioning',  // Precise glyph positioning
+            
+            // Graphics quality
+            '--disable-gpu-compositing',            // Force software compositing for accuracy
+            '--enable-font-antialiasing',           // Smooth font edges
+            '--force-color-profile=srgb',           // Consistent color output
+            
+            // Memory - allow more for high-res rendering
+            '--js-flags=--max-old-space-size=8192', // 8GB heap for JS
+            '--disable-dev-shm-usage',              // Use /tmp instead of /dev/shm
+            
+            // Disable features that could affect quality
+            '--disable-background-timer-throttling',
+            '--disable-backgrounding-occluded-windows',
+            '--disable-renderer-backgrounding'
         ]
     };
 }
@@ -104,7 +122,7 @@ async function generatePDF(resumeDir) {
     
     try {
         // Launch browser for extreme quality rendering
-        console.log('[PDF] Launching browser...');
+        console.log('[PDF] Launching browser with quality-optimized settings...');
         browser = await puppeteer.launch({
             headless: 'new',
             args: CONFIG.browserArgs
@@ -115,40 +133,66 @@ async function generatePDF(resumeDir) {
         // Set viewport at 300 DPI with 4x scale
         await page.setViewport(CONFIG.viewport);
         
-        // Enable request interception to ensure all resources load
-        await page.setRequestInterception(true);
-        page.on('request', request => request.continue());
-        
-        // Track font loading
+        // Track resources for logging
         const fonts = new Set();
+        const images = new Set();
+        
         page.on('response', async (response) => {
             const url = response.url();
-            if (url.includes('fonts.googleapis.com') || url.includes('fonts.gstatic.com')) {
-                fonts.add(url.split('/').pop().split('?')[0]);
+            const contentType = response.headers()['content-type'] || '';
+            
+            if (url.includes('fonts.googleapis.com') || url.includes('fonts.gstatic.com') || contentType.includes('font')) {
+                fonts.add(path.basename(url).split('?')[0]);
+            }
+            if (contentType.includes('image')) {
+                images.add(path.basename(url).split('?')[0]);
             }
         });
         
-        // Navigate to the HTML file with extended timeout
+        // Navigate to the HTML file - networkidle0 waits for no network activity
         console.log('[PDF] Loading resume.html...');
         await page.goto(`file://${CONFIG.inputFile}`, {
-            waitUntil: 'networkidle0', // Wait for all resources to load
+            waitUntil: 'networkidle0',
             timeout: NAVIGATION_TIMEOUT_MS
         });
         
-        // Wait for fonts to load completely
-        console.log('[PDF] Waiting for fonts to load (5 seconds)...');
-        await page.evaluateHandle('document.fonts.ready');
-        await new Promise(resolve => setTimeout(resolve, FONT_LOAD_WAIT_MS));
-        console.log(`[PDF] Fonts loaded: ${fonts.size > 0 ? [...fonts].join(', ') : 'system fonts'}`);
+        // Wait for fonts to be fully loaded (browser API, not arbitrary timeout)
+        console.log('[PDF] Waiting for fonts to load...');
+        await page.evaluate(() => document.fonts.ready);
+        console.log(`[PDF] Fonts loaded: ${fonts.size > 0 ? [...fonts].join(', ') : 'system fonts only'}`);
         
-        // Extended wait for complete rendering (fonts, icons, styles)
-        console.log('[PDF] Waiting for complete render (10 seconds)...');
-        await new Promise(resolve => setTimeout(resolve, RENDER_WAIT_MS));
+        // Wait for all images to be fully decoded
+        console.log('[PDF] Waiting for images to decode...');
+        await page.evaluate(async () => {
+            const images = document.querySelectorAll('img');
+            await Promise.all([...images].map(img => {
+                if (img.complete) return Promise.resolve();
+                return new Promise((resolve, reject) => {
+                    img.onload = resolve;
+                    img.onerror = resolve; // Don't fail on broken images
+                });
+            }));
+            // Decode all images for crisp rendering
+            await Promise.all([...images].map(img => img.decode?.() || Promise.resolve()));
+        });
+        if (images.size > 0) {
+            console.log(`[PDF] Images decoded: ${[...images].join(', ')}`);
+        }
         
-        // Force layout recalculation
+        // Wait for any animations/transitions to complete and layout to stabilize
+        console.log('[PDF] Waiting for layout to stabilize...');
         await page.evaluate(() => {
-            document.body.style.transform = 'translateZ(0)';
-            return document.body.offsetHeight;
+            return new Promise(resolve => {
+                // Force a reflow
+                document.body.offsetHeight;
+                
+                // Wait for next animation frame (ensures paint is complete)
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        resolve();
+                    });
+                });
+            });
         });
         
         // Generate PDF

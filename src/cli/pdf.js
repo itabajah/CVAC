@@ -5,15 +5,14 @@
  * NO COMPROMISES - maximum quality regardless of time, memory, or file size.
  * 
  * Quality Settings (MAXIMUM):
- * - Viewport at 600 DPI = 4961 x 7016 pixels for A4
- * - deviceScaleFactor: 8 on top of 600 DPI = effective 4800 DPI
+ * - Viewport at 300 DPI = 2480 x 3508 pixels for A4
+ * - deviceScaleFactor: 4 on top of 300 DPI = effective 1200 DPI
  * - Proper readiness detection (no arbitrary wait times)
  * - Optimized browser flags for maximum rendering quality
  * 
  * NOTE: PDF file size is small because text/shapes are vectors (infinitely scalable).
  * This is the highest quality - vectors don't need large file sizes.
- * 
- * WARNING: This will use significant memory (4-8GB) and take longer to generate.
+ * 1200 DPI is 4x higher than professional print standard (300 DPI).
  * 
  * Usage:
  *   npm run pdf                      - Generate PDF for first resume
@@ -37,11 +36,11 @@ const NAVIGATION_TIMEOUT_MS = 300000;  // 5 minutes
 
 // Configuration factory - MAXIMUM quality settings
 function getConfig(resumeDir) {
-    // A4 dimensions at 600 DPI (ultra-high print quality)
+    // A4 dimensions at 300 DPI (professional print standard)
     // A4 = 210mm x 297mm
-    // At 600 DPI: (210/25.4)*600 = 4961px, (297/25.4)*600 = 7016px
-    const A4_WIDTH_600DPI = 4961;
-    const A4_HEIGHT_600DPI = 7016;
+    // At 300 DPI: (210/25.4)*300 = 2480px, (297/25.4)*300 = 3508px
+    const A4_WIDTH_300DPI = 2480;
+    const A4_HEIGHT_300DPI = 3508;
     
     return {
         inputFile: path.join(resumeDir, 'resume.html'),
@@ -72,11 +71,11 @@ function getConfig(resumeDir) {
             scale: 1
         },
         
-        // Viewport at 600 DPI with additional 8x scale = effective 4800 DPI
+        // Viewport at 300 DPI with additional 4x scale = effective 1200 DPI
         viewport: {
-            width: A4_WIDTH_600DPI,
-            height: A4_HEIGHT_600DPI,
-            deviceScaleFactor: 8  // 8x on top of 600 DPI = 4800 DPI effective
+            width: A4_WIDTH_300DPI,
+            height: A4_HEIGHT_300DPI,
+            deviceScaleFactor: 4  // 4x on top of 300 DPI = 1200 DPI effective
         },
         
         // Browser args optimized for maximum rendering quality
@@ -113,7 +112,7 @@ async function generatePDF(resumeDir) {
     
     console.log(`[PDF] Starting MAXIMUM quality PDF generation for: ${resumeName}`);
     console.log(`[PDF] Viewport: ${CONFIG.viewport.width}x${CONFIG.viewport.height} @ ${CONFIG.viewport.deviceScaleFactor}x`);
-    console.log(`[PDF] Effective DPI: 4800 (600 DPI × 8x scale)\n`);
+    console.log(`[PDF] Effective DPI: 1200 (300 DPI × 4x scale)\n`);
     
     // Check if input file exists
     if (!fs.existsSync(CONFIG.inputFile)) {
@@ -212,7 +211,7 @@ async function generatePDF(resumeDir) {
         console.log(`  Resume: ${resumeName}`);
         console.log(`  Output: ${path.relative(SRC_DIR, CONFIG.outputFile)}`);
         console.log(`  Size: ${fileSize} KB`);
-        console.log(`  Quality: 4800 DPI (600 DPI × 8x scale)`);
+        console.log(`  Quality: 1200 DPI (300 DPI × 4x scale)`);
         console.log(`  Time: ${duration}s\n`);
         
     } catch (error) {

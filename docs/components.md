@@ -602,7 +602,8 @@ node cli/pdf.js --watch
 **Quality Settings:**
 ```javascript
 {
-  deviceScaleFactor: 16,   // Ultra-maximum quality
+  // Viewport at 300 DPI (A4 = 2480x3508)
+  // deviceScaleFactor: 4 on top = 1200 DPI effective
   printBackground: true,   // Preserve colors
   tagged: true,            // ATS accessibility
   scale: 1                 // No scaling artifacts

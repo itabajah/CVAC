@@ -40,7 +40,7 @@ The AI will generate your complete resume HTML/CSS. Then just run the server and
 - **Easy Setup** - Auto-installs Node.js if missing (Windows: winget, Mac/Linux: Homebrew/apt)
 - Multiple resume versions for different jobs
 - Full HTML/CSS design control
-- ATS-optimized PDF generation (ultra-high quality, 16x device scale)
+- ATS-optimized PDF generation (extreme quality, 1200 DPI)
 - Auto-updating tools and templates
 
 ## Documentation

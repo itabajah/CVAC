@@ -36,9 +36,11 @@ The AI will generate your complete resume HTML/CSS. Then just run the server and
 ## Features
 
 - **Live Reload** - Changes to your resume are reflected instantly in the browser
+- **Auto-shutdown** - Server closes automatically 5 seconds after you close the browser
+- **Easy Setup** - Auto-installs Node.js if missing (Windows: winget, Mac/Linux: Homebrew/apt)
 - Multiple resume versions for different jobs
 - Full HTML/CSS design control
-- ATS-optimized PDF generation (maximum quality, 8x device scale)
+- ATS-optimized PDF generation (extreme quality, 1200 DPI)
 - Auto-updating tools and templates
 
 ## Documentation

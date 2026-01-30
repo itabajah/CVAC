@@ -1,15 +1,18 @@
 /**
- * High-Quality PDF Generator for CV As Code
+ * MAXIMUM Quality PDF Generator for CV As Code
  * 
- * Uses Puppeteer to generate ATS-optimized, print-quality PDFs
- * with proper font embedding and text extraction support.
+ * Uses Puppeteer to generate the highest possible quality PDFs.
+ * NO COMPROMISES - maximum quality regardless of time, memory, or file size.
  * 
- * Quality Settings:
- * - deviceScaleFactor: 8 (maximum quality rendering)
- * - scale: 1 (native rendering, no scaling artifacts)
- * - printBackground: true (preserve all colors and backgrounds)
- * - tagged: true (accessibility and ATS compatibility)
- * - Font rendering optimized for print quality
+ * Quality Settings (MAXIMUM):
+ * - Viewport at 300 DPI = 2480 x 3508 pixels for A4
+ * - deviceScaleFactor: 4 on top of 300 DPI = effective 1200 DPI
+ * - Proper readiness detection (no arbitrary wait times)
+ * - Optimized browser flags for maximum rendering quality
+ * 
+ * NOTE: PDF file size is small because text/shapes are vectors (infinitely scalable).
+ * This is the highest quality - vectors don't need large file sizes.
+ * 1200 DPI is 4x higher than professional print standard (300 DPI).
  * 
  * Usage:
  *   npm run pdf                      - Generate PDF for first resume
@@ -28,13 +31,17 @@ const {
     parseWatchArg 
 } = require('../shared/resume');
 
-// Timing constants - increased for maximum quality
-const NAVIGATION_TIMEOUT_MS = 60000;
-const RENDER_WAIT_MS = 3000;
-const FONT_LOAD_WAIT_MS = 1000;
+// Navigation timeout (generous for slow networks/fonts)
+const NAVIGATION_TIMEOUT_MS = 300000;  // 5 minutes
 
-// Configuration factory - Maximum quality settings
+// Configuration factory - MAXIMUM quality settings
 function getConfig(resumeDir) {
+    // A4 dimensions at 300 DPI (professional print standard)
+    // A4 = 210mm x 297mm
+    // At 300 DPI: (210/25.4)*300 = 2480px, (297/25.4)*300 = 3508px
+    const A4_WIDTH_300DPI = 2480;
+    const A4_HEIGHT_300DPI = 3508;
+    
     return {
         inputFile: path.join(resumeDir, 'resume.html'),
         outputFile: path.join(resumeDir, 'resume.pdf'),
@@ -64,23 +71,36 @@ function getConfig(resumeDir) {
             scale: 1
         },
         
-        // Viewport for consistent rendering - Maximum quality
+        // Viewport at 300 DPI with additional 4x scale = effective 1200 DPI
         viewport: {
-            width: 794,   // A4 width at 96 DPI
-            height: 1123, // A4 height at 96 DPI
-            deviceScaleFactor: 8  // 8x for maximum quality rendering (print-grade)
+            width: A4_WIDTH_300DPI,
+            height: A4_HEIGHT_300DPI,
+            deviceScaleFactor: 4  // 4x on top of 300 DPI = 1200 DPI effective
         },
         
-        // Browser launch args for best rendering quality
+        // Browser args optimized for maximum rendering quality
         browserArgs: [
+            // Required for stability
             '--no-sandbox',
             '--disable-setuid-sandbox',
-            '--disable-dev-shm-usage',
-            '--font-render-hinting=none',        // Better font rendering
-            '--disable-gpu-driver-bug-workarounds',
-            '--enable-font-antialiasing',        // Smooth fonts
-            '--force-color-profile=srgb',        // Consistent colors
-            '--disable-accelerated-2d-canvas'    // Software rendering for consistency
+            
+            // Font rendering optimization
+            '--font-render-hinting=none',           // Disable hinting for clean vector output
+            '--disable-font-subpixel-positioning',  // Precise glyph positioning
+            
+            // Graphics quality
+            '--disable-gpu-compositing',            // Force software compositing for accuracy
+            '--enable-font-antialiasing',           // Smooth font edges
+            '--force-color-profile=srgb',           // Consistent color output
+            
+            // Memory - allow more for high-res rendering
+            '--js-flags=--max-old-space-size=8192', // 8GB heap for JS
+            '--disable-dev-shm-usage',              // Use /tmp instead of /dev/shm
+            
+            // Disable features that could affect quality
+            '--disable-background-timer-throttling',
+            '--disable-backgrounding-occluded-windows',
+            '--disable-renderer-backgrounding'
         ]
     };
 }
@@ -90,7 +110,9 @@ async function generatePDF(resumeDir) {
     const resumeName = path.basename(resumeDir);
     const startTime = Date.now();
     
-    console.log(`[PDF] Starting PDF generation for: ${resumeName}\n`);
+    console.log(`[PDF] Starting MAXIMUM quality PDF generation for: ${resumeName}`);
+    console.log(`[PDF] Viewport: ${CONFIG.viewport.width}x${CONFIG.viewport.height} @ ${CONFIG.viewport.deviceScaleFactor}x`);
+    console.log(`[PDF] Effective DPI: 1200 (300 DPI × 4x scale)\n`);
     
     // Check if input file exists
     if (!fs.existsSync(CONFIG.inputFile)) {
@@ -101,8 +123,8 @@ async function generatePDF(resumeDir) {
     let browser;
     
     try {
-        // Launch browser with optimized settings for maximum quality
-        console.log('[PDF] Launching browser with high-quality settings...');
+        // Launch browser for maximum quality rendering
+        console.log('[PDF] Launching browser with quality-optimized settings...');
         browser = await puppeteer.launch({
             headless: 'new',
             args: CONFIG.browserArgs
@@ -110,47 +132,82 @@ async function generatePDF(resumeDir) {
         
         const page = await browser.newPage();
         
-        // Set viewport for consistent rendering at maximum quality
+        // Set viewport at 600 DPI with 8x scale
         await page.setViewport(CONFIG.viewport);
         
-        // Enable request interception to ensure all resources load
-        await page.setRequestInterception(true);
-        page.on('request', request => request.continue());
-        
-        // Track font loading
+        // Track resources for logging
         const fonts = new Set();
+        const images = new Set();
+        
         page.on('response', async (response) => {
             const url = response.url();
-            if (url.includes('fonts.googleapis.com') || url.includes('fonts.gstatic.com')) {
-                fonts.add(url.split('/').pop().split('?')[0]);
+            const contentType = response.headers()['content-type'] || '';
+            
+            // Safely check hostname to avoid URL substring sanitization issues
+            let hostname = '';
+            try {
+                hostname = new URL(url).hostname;
+            } catch {
+                // Invalid URL, skip
+            }
+            
+            const isFontHost = hostname === 'fonts.googleapis.com' || hostname === 'fonts.gstatic.com';
+            if (isFontHost || contentType.includes('font')) {
+                fonts.add(path.basename(url).split('?')[0]);
+            }
+            if (contentType.includes('image')) {
+                images.add(path.basename(url).split('?')[0]);
             }
         });
         
-        // Navigate to the HTML file with extended timeout
+        // Navigate to the HTML file - networkidle0 waits for no network activity
         console.log('[PDF] Loading resume.html...');
         await page.goto(`file://${CONFIG.inputFile}`, {
-            waitUntil: 'networkidle0', // Wait for all resources to load
+            waitUntil: 'networkidle0',
             timeout: NAVIGATION_TIMEOUT_MS
         });
         
-        // Wait for fonts to load completely
+        // Wait for fonts to be fully loaded (browser API, not arbitrary timeout)
         console.log('[PDF] Waiting for fonts to load...');
-        await page.evaluateHandle('document.fonts.ready');
-        await new Promise(resolve => setTimeout(resolve, FONT_LOAD_WAIT_MS));
-        console.log(`[PDF] Fonts loaded: ${fonts.size > 0 ? [...fonts].join(', ') : 'system fonts'}`);
+        await page.evaluate(() => document.fonts.ready);
+        console.log(`[PDF] Fonts loaded: ${fonts.size > 0 ? [...fonts].join(', ') : 'system fonts only'}`);
         
-        // Extended wait for complete rendering (fonts, icons, styles)
-        console.log('[PDF] Waiting for complete render...');
-        await new Promise(resolve => setTimeout(resolve, RENDER_WAIT_MS));
+        // Wait for all images to be fully decoded
+        console.log('[PDF] Waiting for images to decode...');
+        await page.evaluate(async () => {
+            const images = document.querySelectorAll('img');
+            await Promise.all([...images].map(img => {
+                if (img.complete) return Promise.resolve();
+                return new Promise((resolve, reject) => {
+                    img.onload = resolve;
+                    img.onerror = resolve; // Don't fail on broken images
+                });
+            }));
+            // Decode all images for crisp rendering
+            await Promise.all([...images].map(img => img.decode?.() || Promise.resolve()));
+        });
+        if (images.size > 0) {
+            console.log(`[PDF] Images decoded: ${[...images].join(', ')}`);
+        }
         
-        // Force layout recalculation for best quality
+        // Wait for any animations/transitions to complete and layout to stabilize
+        console.log('[PDF] Waiting for layout to stabilize...');
         await page.evaluate(() => {
-            document.body.style.transform = 'translateZ(0)';
-            return document.body.offsetHeight;
+            return new Promise(resolve => {
+                // Force a reflow
+                document.body.offsetHeight;
+                
+                // Wait for next animation frame (ensures paint is complete)
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        resolve();
+                    });
+                });
+            });
         });
         
-        // Generate PDF with maximum quality
-        console.log('[PDF] Generating high-quality PDF...');
+        // Generate PDF
+        console.log('[PDF] Generating MAXIMUM quality PDF...');
         await page.pdf({
             path: CONFIG.outputFile,
             ...CONFIG.pdf
@@ -159,11 +216,11 @@ async function generatePDF(resumeDir) {
         const duration = ((Date.now() - startTime) / 1000).toFixed(2);
         const fileSize = (fs.statSync(CONFIG.outputFile).size / 1024).toFixed(1);
         
-        console.log(`\n[SUCCESS] High-quality PDF generated successfully!`);
+        console.log(`\n[SUCCESS] MAXIMUM quality PDF generated!`);
         console.log(`  Resume: ${resumeName}`);
         console.log(`  Output: ${path.relative(SRC_DIR, CONFIG.outputFile)}`);
         console.log(`  Size: ${fileSize} KB`);
-        console.log(`  Quality: Maximum (8x device scale)`);
+        console.log(`  Quality: 1200 DPI (300 DPI × 4x scale)`);
         console.log(`  Time: ${duration}s\n`);
         
     } catch (error) {

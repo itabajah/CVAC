@@ -121,9 +121,9 @@ describe('PDF Generation Integration Tests', () => {
             assertContains(content, 'NAVIGATION_TIMEOUT_MS', 'Should define timeout constant');
         });
         
-        it('should have RENDER_WAIT_MS constant', () => {
+        it('should use proper readiness detection for fonts', () => {
             const content = fs.readFileSync(path.join(SRC_DIR, 'cli/pdf.js'), 'utf-8');
-            assertContains(content, 'RENDER_WAIT_MS', 'Should define render wait constant');
+            assertContains(content, 'document.fonts.ready', 'Should wait for fonts via browser API');
         });
         
         it('should configure A4 format', () => {

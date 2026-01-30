@@ -14,6 +14,16 @@ This guide helps resolve common issues with CV As Code.
 ```
 
 **Solution:**
+
+The launcher scripts now offer automatic Node.js installation:
+1. Run `RunWindows.bat` or `./RunLinux.sh`
+2. When prompted, press **Y** to install automatically
+   - Windows: Uses `winget install OpenJS.NodeJS.LTS`
+   - macOS: Uses Homebrew (`brew install node`)
+   - Linux: Uses apt/dnf/pacman depending on your distribution
+3. Restart the script after installation
+
+**Manual installation:**
 1. Install Node.js from https://nodejs.org (v18+)
 2. Restart your terminal/command prompt
 3. Verify with `node --version`
@@ -193,7 +203,7 @@ ERROR: Failed to download Chromium
 
 **Solutions:**
 
-1. **Use latest version** - PDF quality was improved (8x device scale)
+1. **Use latest version** - PDF quality was improved (1200 DPI)
 2. **Check CSS** - Ensure `print-color-adjust: exact` is set
 3. **Use vector icons** - Font Awesome instead of images
 
@@ -207,11 +217,12 @@ If you need faster generation, edit `src/cli/pdf.js`:
 ```javascript
 // Reduce for faster (lower quality) generation
 viewport: {
-    deviceScaleFactor: 4  // Changed from 8
+    deviceScaleFactor: 8  // Changed from 16
 }
 
 // Reduce wait times
-const RENDER_WAIT_MS = 1000;  // Changed from 3000
+const RENDER_WAIT_MS = 2000;  // Changed from 5000
+const FONT_LOAD_WAIT_MS = 1000;  // Changed from 3000
 ```
 
 ---

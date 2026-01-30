@@ -6,6 +6,8 @@
  * 
  * This approach is simpler than WebSocket and requires no additional dependencies
  * beyond chokidar for file watching.
+ * 
+ * Auto-shutdown: Server automatically closes 5 seconds after the last client disconnects.
  */
 
 const chokidar = require('chokidar');
@@ -21,6 +23,11 @@ let watcher = null;
 // Debounce timer to prevent rapid-fire notifications
 let debounceTimer = null;
 const DEBOUNCE_MS = 100;
+
+// Auto-shutdown timer and callback
+let autoShutdownTimer = null;
+let autoShutdownCallback = null;
+const AUTO_SHUTDOWN_DELAY_MS = 5000;
 
 /**
  * Initialize file watcher for the current resume directory
@@ -130,11 +137,19 @@ function handleSSEConnection(res) {
     // Add to clients set
     clients.add(res);
     console.log(`[LIVE-RELOAD] Client connected (${clients.size} total)`);
+    
+    // Cancel auto-shutdown if a new client connects
+    cancelAutoShutdownTimer();
 
     // Handle client disconnect
     res.on('close', () => {
         clients.delete(res);
         console.log(`[LIVE-RELOAD] Client disconnected (${clients.size} remaining)`);
+        
+        // Start auto-shutdown timer when last client disconnects
+        if (clients.size === 0) {
+            startAutoShutdownTimer();
+        }
     });
 
     // Keep connection alive with periodic heartbeat
@@ -160,6 +175,10 @@ function cleanup() {
     }
     clients.clear();
     clearTimeout(debounceTimer);
+    if (autoShutdownTimer) {
+        clearTimeout(autoShutdownTimer);
+        autoShutdownTimer = null;
+    }
     console.log('[LIVE-RELOAD] Cleaned up');
 }
 
@@ -170,11 +189,51 @@ function getClientCount() {
     return clients.size;
 }
 
+/**
+ * Set callback for auto-shutdown when all clients disconnect
+ * @param {Function} callback - Function to call when shutting down
+ */
+function setAutoShutdownCallback(callback) {
+    autoShutdownCallback = callback;
+}
+
+/**
+ * Start auto-shutdown timer (called when last client disconnects)
+ */
+function startAutoShutdownTimer() {
+    // Clear any existing timer
+    if (autoShutdownTimer) {
+        clearTimeout(autoShutdownTimer);
+    }
+    
+    console.log(`[LIVE-RELOAD] No clients connected. Server will shutdown in ${AUTO_SHUTDOWN_DELAY_MS / 1000} seconds...`);
+    
+    autoShutdownTimer = setTimeout(() => {
+        if (clients.size === 0 && autoShutdownCallback) {
+            console.log('[LIVE-RELOAD] Auto-shutdown triggered (no clients)');
+            autoShutdownCallback();
+        }
+    }, AUTO_SHUTDOWN_DELAY_MS);
+}
+
+/**
+ * Cancel auto-shutdown timer (called when a new client connects)
+ */
+function cancelAutoShutdownTimer() {
+    if (autoShutdownTimer) {
+        clearTimeout(autoShutdownTimer);
+        autoShutdownTimer = null;
+        console.log('[LIVE-RELOAD] Auto-shutdown cancelled (client connected)');
+    }
+}
+
 module.exports = {
     initWatcher,
     switchWatcher,
     handleSSEConnection,
     notifyClients,
     cleanup,
-    getClientCount
+    getClientCount,
+    setAutoShutdownCallback,
+    cancelAutoShutdownTimer
 };

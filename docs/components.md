@@ -12,6 +12,7 @@ Windows batch script entry point.
 
 **Purpose:**
 - Checks for Node.js installation
+- Offers automatic Node.js installation via winget if missing
 - Navigates to src/ directory
 - Runs the launcher via npm
 
@@ -28,6 +29,7 @@ Unix shell script entry point.
 
 **Purpose:**
 - Checks for Node.js installation
+- Offers automatic Node.js installation via Homebrew/apt/dnf/pacman if missing
 - Sets execute permissions
 - Runs the launcher via npm
 
@@ -211,7 +213,7 @@ Resume discovery and management (high-level operations).
 
 ### `live-reload.js`
 
-File watching and Server-Sent Events.
+File watching and Server-Sent Events with auto-shutdown.
 
 **Key Functions:**
 
@@ -223,6 +225,12 @@ File watching and Server-Sent Events.
 | `notifyClients(event, data)` | Broadcast to all SSE clients |
 | `cleanup()` | Close watcher and connections |
 | `getClientCount()` | Number of connected clients |
+| `setAutoShutdownCallback(fn)` | Set callback for auto-shutdown |
+| `cancelAutoShutdownTimer()` | Cancel pending auto-shutdown |
+
+**Auto-Shutdown:**
+- Server automatically shuts down 5 seconds after the last client disconnects
+- Timer is cancelled if a new client connects within the grace period
 
 **Watched Files:**
 - `resume.html`
@@ -594,7 +602,8 @@ node cli/pdf.js --watch
 **Quality Settings:**
 ```javascript
 {
-  deviceScaleFactor: 8,    // Maximum quality
+  // Viewport at 300 DPI (A4 = 2480x3508)
+  // deviceScaleFactor: 4 on top = 1200 DPI effective
   printBackground: true,   // Preserve colors
   tagged: true,            // ATS accessibility
   scale: 1                 // No scaling artifacts

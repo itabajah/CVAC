@@ -26,7 +26,7 @@ const http = require('http');
 
 const { parseResumeArg, getCurrentResumeDir, getAvailableResumes, getCurrentResume } = require('./resumes');
 const { handleRequest } = require('./routes');
-const { initWatcher, cleanup: cleanupLiveReload } = require('./live-reload');
+const { initWatcher, cleanup: cleanupLiveReload, setAutoShutdownCallback } = require('./live-reload');
 
 const PORT = process.env.CV_PORT || 3000;
 
@@ -103,4 +103,10 @@ server.listen(PORT, () => {
     
     // Initialize live reload file watcher after server starts
     initWatcher();
+    
+    // Set up auto-shutdown when all clients disconnect (fast shutdown, no cleanup)
+    setAutoShutdownCallback(() => {
+        console.log('\n[SERVER] All clients disconnected. Shutting down automatically...');
+        gracefulShutdown('auto-shutdown', 2);
+    });
 });

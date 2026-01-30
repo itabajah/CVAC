@@ -59,8 +59,8 @@ cv-as-code/
 ### 1. Live Reload
 The server monitors your resume files for changes and automatically refreshes the preview. No need to manually refresh the browser.
 
-### 2. High-Quality PDF Generation
-PDFs are generated at 8x device scale factor for maximum quality, with proper font embedding and ATS-friendly tagging.
+### 2. Extreme Quality PDF Generation
+PDFs are generated at 1200 DPI (300 DPI viewport × 4x scale) for extreme print quality, with proper font embedding and ATS-friendly tagging.
 
 ### 3. ATS Compatibility Testing
 See exactly what text Applicant Tracking Systems will extract from your PDF, with keyword analysis and issue detection.

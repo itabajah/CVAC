@@ -104,9 +104,9 @@ server.listen(PORT, () => {
     // Initialize live reload file watcher after server starts
     initWatcher();
     
-    // Set up auto-shutdown when all clients disconnect
+    // Set up auto-shutdown when all clients disconnect (fast shutdown, no cleanup)
     setAutoShutdownCallback(() => {
         console.log('\n[SERVER] All clients disconnected. Shutting down automatically...');
-        gracefulShutdown('auto-shutdown', 0);
+        gracefulShutdown('auto-shutdown', 2);
     });
 });

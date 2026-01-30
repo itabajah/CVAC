@@ -143,7 +143,16 @@ async function generatePDF(resumeDir) {
             const url = response.url();
             const contentType = response.headers()['content-type'] || '';
             
-            if (url.includes('fonts.googleapis.com') || url.includes('fonts.gstatic.com') || contentType.includes('font')) {
+            // Safely check hostname to avoid URL substring sanitization issues
+            let hostname = '';
+            try {
+                hostname = new URL(url).hostname;
+            } catch {
+                // Invalid URL, skip
+            }
+            
+            const isFontHost = hostname === 'fonts.googleapis.com' || hostname === 'fonts.gstatic.com';
+            if (isFontHost || contentType.includes('font')) {
                 fonts.add(path.basename(url).split('?')[0]);
             }
             if (contentType.includes('image')) {

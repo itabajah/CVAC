@@ -203,7 +203,7 @@ ERROR: Failed to download Chromium
 
 **Solutions:**
 
-1. **Use latest version** - PDF quality was improved (16x device scale)
+1. **Use latest version** - PDF quality was improved (1200 DPI)
 2. **Check CSS** - Ensure `print-color-adjust: exact` is set
 3. **Use vector icons** - Font Awesome instead of images
 

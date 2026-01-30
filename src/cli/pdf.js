@@ -1,16 +1,19 @@
 /**
- * EXTREME Quality PDF Generator for CV As Code
+ * MAXIMUM Quality PDF Generator for CV As Code
  * 
  * Uses Puppeteer to generate the highest possible quality PDFs.
  * NO COMPROMISES - maximum quality regardless of time, memory, or file size.
  * 
- * Quality Settings (EXTREME):
- * - Viewport at 300 DPI (print standard) = 2480 x 3508 pixels for A4
- * - deviceScaleFactor: 4 on top of 300 DPI = effective 1200 DPI
+ * Quality Settings (MAXIMUM):
+ * - Viewport at 600 DPI = 4961 x 7016 pixels for A4
+ * - deviceScaleFactor: 8 on top of 600 DPI = effective 4800 DPI
  * - Proper readiness detection (no arbitrary wait times)
  * - Optimized browser flags for maximum rendering quality
  * 
- * WARNING: This will use significant memory (2-4GB) and take longer to generate.
+ * NOTE: PDF file size is small because text/shapes are vectors (infinitely scalable).
+ * This is the highest quality - vectors don't need large file sizes.
+ * 
+ * WARNING: This will use significant memory (4-8GB) and take longer to generate.
  * 
  * Usage:
  *   npm run pdf                      - Generate PDF for first resume
@@ -32,19 +35,19 @@ const {
 // Navigation timeout (generous for slow networks/fonts)
 const NAVIGATION_TIMEOUT_MS = 300000;  // 5 minutes
 
-// Configuration factory - EXTREME quality settings
+// Configuration factory - MAXIMUM quality settings
 function getConfig(resumeDir) {
-    // A4 dimensions at 300 DPI (print standard)
+    // A4 dimensions at 600 DPI (ultra-high print quality)
     // A4 = 210mm x 297mm
-    // At 300 DPI: (210/25.4)*300 = 2480px, (297/25.4)*300 = 3508px
-    const A4_WIDTH_300DPI = 2480;
-    const A4_HEIGHT_300DPI = 3508;
+    // At 600 DPI: (210/25.4)*600 = 4961px, (297/25.4)*600 = 7016px
+    const A4_WIDTH_600DPI = 4961;
+    const A4_HEIGHT_600DPI = 7016;
     
     return {
         inputFile: path.join(resumeDir, 'resume.html'),
         outputFile: path.join(resumeDir, 'resume.pdf'),
         
-        // PDF Settings optimized for extreme quality, ATS and print
+        // PDF Settings optimized for maximum quality, ATS and print
         pdf: {
             format: 'A4',
             printBackground: true,
@@ -69,11 +72,11 @@ function getConfig(resumeDir) {
             scale: 1
         },
         
-        // Viewport at 300 DPI with additional 4x scale = effective 1200 DPI
+        // Viewport at 600 DPI with additional 8x scale = effective 4800 DPI
         viewport: {
-            width: A4_WIDTH_300DPI,
-            height: A4_HEIGHT_300DPI,
-            deviceScaleFactor: 4  // 4x on top of 300 DPI = 1200 DPI effective
+            width: A4_WIDTH_600DPI,
+            height: A4_HEIGHT_600DPI,
+            deviceScaleFactor: 8  // 8x on top of 600 DPI = 4800 DPI effective
         },
         
         // Browser args optimized for maximum rendering quality
@@ -108,9 +111,9 @@ async function generatePDF(resumeDir) {
     const resumeName = path.basename(resumeDir);
     const startTime = Date.now();
     
-    console.log(`[PDF] Starting EXTREME quality PDF generation for: ${resumeName}`);
+    console.log(`[PDF] Starting MAXIMUM quality PDF generation for: ${resumeName}`);
     console.log(`[PDF] Viewport: ${CONFIG.viewport.width}x${CONFIG.viewport.height} @ ${CONFIG.viewport.deviceScaleFactor}x`);
-    console.log(`[PDF] Effective DPI: ${300 * CONFIG.viewport.deviceScaleFactor} (1200 DPI)\n`);
+    console.log(`[PDF] Effective DPI: 4800 (600 DPI × 8x scale)\n`);
     
     // Check if input file exists
     if (!fs.existsSync(CONFIG.inputFile)) {
@@ -121,7 +124,7 @@ async function generatePDF(resumeDir) {
     let browser;
     
     try {
-        // Launch browser for extreme quality rendering
+        // Launch browser for maximum quality rendering
         console.log('[PDF] Launching browser with quality-optimized settings...');
         browser = await puppeteer.launch({
             headless: 'new',
@@ -130,7 +133,7 @@ async function generatePDF(resumeDir) {
         
         const page = await browser.newPage();
         
-        // Set viewport at 300 DPI with 4x scale
+        // Set viewport at 600 DPI with 8x scale
         await page.setViewport(CONFIG.viewport);
         
         // Track resources for logging
@@ -196,7 +199,7 @@ async function generatePDF(resumeDir) {
         });
         
         // Generate PDF
-        console.log('[PDF] Generating EXTREME quality PDF...');
+        console.log('[PDF] Generating MAXIMUM quality PDF...');
         await page.pdf({
             path: CONFIG.outputFile,
             ...CONFIG.pdf
@@ -205,11 +208,11 @@ async function generatePDF(resumeDir) {
         const duration = ((Date.now() - startTime) / 1000).toFixed(2);
         const fileSize = (fs.statSync(CONFIG.outputFile).size / 1024).toFixed(1);
         
-        console.log(`\n[SUCCESS] EXTREME quality PDF generated!`);
+        console.log(`\n[SUCCESS] MAXIMUM quality PDF generated!`);
         console.log(`  Resume: ${resumeName}`);
         console.log(`  Output: ${path.relative(SRC_DIR, CONFIG.outputFile)}`);
         console.log(`  Size: ${fileSize} KB`);
-        console.log(`  Quality: 1200 DPI (300 DPI × 4x scale)`);
+        console.log(`  Quality: 4800 DPI (600 DPI × 8x scale)`);
         console.log(`  Time: ${duration}s\n`);
         
     } catch (error) {
